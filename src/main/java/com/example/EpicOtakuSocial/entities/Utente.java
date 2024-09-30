@@ -1,11 +1,9 @@
 package com.example.EpicOtakuSocial.entities;
 
 import com.example.EpicOtakuSocial.enums.RuoloUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"password", "enabled", "accountNonLocked", "accountNonExpired", "credentialsNonExpired", "authorities"})
+@JsonIgnoreProperties({"password", "listaAmici", "enabled", "accountNonLocked", "accountNonExpired", "credentialsNonExpired", "authorities"})
 public class Utente implements UserDetails {
     @Id
     @GeneratedValue
@@ -35,9 +33,14 @@ public class Utente implements UserDetails {
     private String cognome;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private RuoloUser ruolo;
     private String avatar;
-    private List<Utente> listaAmici = new ArrayList<>();
+    private List<String> listaAmici = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "autore")
+    private List<Aggiornamento> aggiornamentoList;
 
     public Utente(String username, String nome, String cognome, String email, String password, RuoloUser ruolo, String avatar) {
         this.username = username;
