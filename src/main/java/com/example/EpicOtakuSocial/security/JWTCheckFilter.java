@@ -35,7 +35,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             throw new UnauthorizedException("Per favore inserisci correttamente il token nell'Authorization Header");
 
         String accessToken = authHeader.substring(7);
-        System.out.println("ACCESS TOKEN " + accessToken);
         jwtTools.verifyToken(accessToken);
         String id = jwtTools.extractIdFromToken(accessToken);
         Utente currentUser = this.utentiService.findById(UUID.fromString(id));

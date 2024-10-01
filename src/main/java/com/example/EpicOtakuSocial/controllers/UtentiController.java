@@ -1,9 +1,12 @@
 package com.example.EpicOtakuSocial.controllers;
 
 
+import com.example.EpicOtakuSocial.entities.Post;
 import com.example.EpicOtakuSocial.entities.Utente;
+import com.example.EpicOtakuSocial.exceptions.NotFoundException;
 import com.example.EpicOtakuSocial.payloads.UtenteDTO;
 import com.example.EpicOtakuSocial.payloads.UtenteRespDTO;
+import com.example.EpicOtakuSocial.services.PostsService;
 import com.example.EpicOtakuSocial.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -25,6 +29,8 @@ public class UtentiController {
 
     @Autowired
     private UtentiService utentiService;
+    @Autowired
+    private PostsService postsService;
 
 
 
@@ -80,6 +86,39 @@ public class UtentiController {
             throw new RuntimeException(e);
         }
     }
+    @PutMapping("/me/posts/{postId}")
+    public Post findByIdAndUpdate(@PathVariable UUID postId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato,
+                                  @RequestParam("message") String message,
+                                  @RequestParam("avatar") MultipartFile file)throws IOException {
+        List<Post> myPostList = postsService.findByAutore(utenteCorrenteAutenticato);
+
+        //controllo che l'id passato sia uno della sua lista
+        Post myPost = myPostList.stream().filter(prenotazione -> prenotazione.getId()
+                .equals(postId)).findFirst().orElseThrow(() -> new NotFoundException("Il post con id" + postId + " non è stato trovato nella tua lista di post!"));
+
+        return this.postsService.update(myPost.getId(), message, file);
+    }
+    @GetMapping("/me/posts")
+    public Page<Post> getMyPosts(@RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "20") int size,
+                             @RequestParam(defaultValue = "id") String sortBy,
+                             @AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
+        return this.postsService.findAll(page, size, sortBy);
+    }
+    @DeleteMapping("/me/posts/{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMyPost(@PathVariable UUID postId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
+        List<Post> myPostList = postsService.findByAutore(utenteCorrenteAutenticato);
+
+        //controllo che l'id passato sia uno della sua lista
+        Post myPost = myPostList.stream().filter(prenotazione -> prenotazione.getId()
+                .equals(postId)).findFirst().orElseThrow(() -> new NotFoundException("Il post con id" + postId + " non è stato trovato nella tua lista di post!"));
+
+        this.postsService.delete(myPost.getId());
+    }
+
+
+
 
 
     // CLOUDINARY

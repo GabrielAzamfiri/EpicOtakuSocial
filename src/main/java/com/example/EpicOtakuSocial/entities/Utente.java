@@ -40,7 +40,7 @@ public class Utente implements UserDetails {
 
     @JsonIgnore
     @OneToMany(mappedBy = "autore")
-    private List<Aggiornamento> aggiornamentoList;
+    private List<Post> postList;
 
     public Utente(String username, String nome, String cognome, String email, String password, RuoloUser ruolo, String avatar) {
         this.username = username;
