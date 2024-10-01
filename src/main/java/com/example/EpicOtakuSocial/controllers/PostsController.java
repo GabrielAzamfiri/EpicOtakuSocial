@@ -30,9 +30,9 @@ public class PostsController {
     @Autowired
     private PostsService postsService;
 
-    @GetMapping("/{utenteId}")
-    public Post getById(@PathVariable UUID utenteId) {
-        return this.postsService.findById(utenteId);
+    @GetMapping("/{postId}")
+    public Post getById(@PathVariable UUID postId) {
+        return this.postsService.findById(postId);
     }
 
     @GetMapping

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,7 @@ public class PostsService {
 
         post.setText(message);
         post.setFile(url);
+        post.setOra(LocalDateTime.now());
 
         return postsRepository.save(post);
     }

@@ -28,13 +28,21 @@ public class Commento {
     private LocalDateTime ora;
     private Integer numeroLike;
     private Integer numeroDislike;
+    private UUID postId;
+
     @JsonIgnore
     @ManyToMany
     private List<Commento> listaCommenti = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post")
     private Post post;
+
+
+    @ManyToOne
+    @JoinColumn(name = "autore_commento")
+    private Utente autoreCommento;
 
     public Commento(String commento, Post post) {
         this.commento = commento;
@@ -42,5 +50,6 @@ public class Commento {
         this.numeroLike = 0;
         this.numeroDislike = 0;
         this.post = post;
+        this.postId = post.getId();
     }
 }

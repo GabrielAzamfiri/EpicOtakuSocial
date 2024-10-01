@@ -1,11 +1,14 @@
 package com.example.EpicOtakuSocial.controllers;
 
 
+import com.example.EpicOtakuSocial.entities.Commento;
 import com.example.EpicOtakuSocial.entities.Post;
 import com.example.EpicOtakuSocial.entities.Utente;
 import com.example.EpicOtakuSocial.exceptions.NotFoundException;
+import com.example.EpicOtakuSocial.payloads.CommentoDTO;
 import com.example.EpicOtakuSocial.payloads.UtenteDTO;
 import com.example.EpicOtakuSocial.payloads.UtenteRespDTO;
+import com.example.EpicOtakuSocial.services.CommentiService;
 import com.example.EpicOtakuSocial.services.PostsService;
 import com.example.EpicOtakuSocial.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +33,8 @@ public class UtentiController {
     private UtentiService utentiService;
     @Autowired
     private PostsService postsService;
+    @Autowired
+    private CommentiService commentiService;
 
 
 
@@ -116,10 +120,36 @@ public class UtentiController {
 
         this.postsService.delete(myPost.getId());
     }
+    @GetMapping("/me/commenti")
+    public Page<Commento> getMyCommenti(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "20") int size,
+                                     @RequestParam(defaultValue = "id") String sortBy,
+                                     @AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
+        return this.commentiService.findAll(page, size, sortBy);
+    }
 
+    @PutMapping("/me/commenti/{commentoId}")
+    public Commento findByIdAndUpdate(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato,
+                                      @RequestBody @Validated CommentoDTO commentoDTO) {
+        List<Commento> myCommentiList = commentiService.findByAutoreCommento(utenteCorrenteAutenticato);
 
+        //controllo che l'id passato sia uno della sua lista
+        Commento myCommento = myCommentiList.stream().filter(prenotazione -> prenotazione.getId()
+                .equals(commentoId)).findFirst().orElseThrow(() -> new NotFoundException("Il Commento con id" + commentoId + " non è stato trovato nella tua lista di commenti!"));
 
+        return this.commentiService.update(myCommento.getId(),commentoDTO);
+    }
+    @DeleteMapping("/me/commenti/{commentoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMyCommento(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
+        List<Commento> myCommentiList = commentiService.findByAutoreCommento(utenteCorrenteAutenticato);
 
+        //controllo che l'id passato sia uno della sua lista
+        Commento myCommento = myCommentiList.stream().filter(prenotazione -> prenotazione.getId()
+                .equals(commentoId)).findFirst().orElseThrow(() -> new NotFoundException("Il Commento con id" + commentoId + " non è stato trovato nella tua lista di commenti!"));
+
+        this.commentiService.delete(myCommento.getId());
+    }
 
     // CLOUDINARY
     // UPLOAD IMMAGINE
