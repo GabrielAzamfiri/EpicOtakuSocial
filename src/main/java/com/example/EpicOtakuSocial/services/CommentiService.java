@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,9 +36,11 @@ public class CommentiService {
     }
 
     public Commento findById(UUID commentoId) {
+
         return this.commentiRepository.findById(commentoId)
                 .orElseThrow(() -> new NotFoundException(commentoId));
     }
+
     public List<Commento> findByAutoreCommento(Utente autoreCommento) {
         return this.commentiRepository.findByAutoreCommento(autoreCommento);
     }
@@ -54,12 +57,44 @@ public class CommentiService {
         Post elemento = postsRepository.findById(uuidElemento)
                 .orElseThrow(() -> new NotFoundException(uuidElemento));
 
-        Commento commento = new Commento(commentoDTO.commento(),LocalDateTime.now(),0,0,uuidElemento,elemento);
-        commento.setAutoreCommento(autoreCommento);
-        commentiRepository.save(commento);
-        elemento.addCommento(commento);
+        Commento nuovoCommento = new Commento(commentoDTO.commento(),LocalDateTime.now(),
+                0,0,uuidElemento,elemento);
+
+        nuovoCommento.setAutoreCommento(autoreCommento);
+
+
+        elemento.addCommento(nuovoCommento);
         postsRepository.save(elemento);
-        return commento;
+
+        return commentiRepository.save(nuovoCommento);
+
+
+    }
+    public Commento saveSottoCommento(Utente autoreCommento, CommentoDTO commentoDTO, UUID idCommentoPadre) {
+
+        UUID uuidElemento;
+        try {
+            uuidElemento =  UUID.fromString(commentoDTO.elementoCommentato());
+        }catch (Exception e){
+            throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
+        }
+
+        Post elemento = postsRepository.findById(uuidElemento)
+                .orElseThrow(() -> new NotFoundException(uuidElemento));
+
+        Commento nuovoSottoCommento = new Commento(commentoDTO.commento(),LocalDateTime.now(),0,0,uuidElemento,elemento);
+        nuovoSottoCommento.setAutoreCommento(autoreCommento);
+
+        Optional<Commento> commentoPadreOpt = commentiRepository.findById(idCommentoPadre);
+        if (commentoPadreOpt.isPresent()) {
+            Commento commentoPadre = commentoPadreOpt.get();
+
+            commentoPadre.addCommento(nuovoSottoCommento);
+
+            return commentiRepository.save(commentoPadre);
+        } else {
+            throw new NotFoundException("Commento padre non trovato con ID: " + idCommentoPadre);
+        }
     }
 
     public Commento update(UUID commentoId , CommentoDTO commentoDTO) {

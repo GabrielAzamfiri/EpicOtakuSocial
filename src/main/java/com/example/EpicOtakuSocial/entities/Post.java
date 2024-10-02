@@ -1,5 +1,6 @@
 package com.example.EpicOtakuSocial.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "posts")
@@ -28,7 +30,7 @@ public class Post extends Elemento {
     @JoinColumn(name = "autore")
     private Utente autore;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<Commento> listaCommenti = new ArrayList<>();
 
@@ -39,9 +41,17 @@ public class Post extends Elemento {
         this.autore = autore;
     }
 
+    public List<Commento> getCommentiPrincipali() {
+        return listaCommenti.stream()
+                .filter(commento -> commento.getCommentoPadre() == null)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void addCommento(Commento commento) {
-        this.listaCommenti.add(commento);
+        if (commento.getCommentoPadre() == null) {
+            this.listaCommenti.add(commento);
+        }
     }
 
     @Override

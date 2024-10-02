@@ -33,9 +33,12 @@ public class PostsService {
     }
 
     public Post findById(UUID postId) {
-        return this.postsRepository.findById(postId)
+        Post post = this.postsRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Il post con l'id " + postId + " non è stato trovato."));
+        post.setListaCommenti(post.getCommentiPrincipali());
+        return post;
     }
+
     public List<Post> findByAutore(Utente autore) {
         return this.postsRepository.findByAutore(autore);
     }

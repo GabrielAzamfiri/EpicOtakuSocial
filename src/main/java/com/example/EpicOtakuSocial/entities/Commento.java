@@ -28,13 +28,19 @@ public class Commento extends Elemento {
     private UUID postId;
 
     @JsonIgnore
-    @ManyToMany
-    private List<Commento> listaCommenti = new ArrayList<>();
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post")
     private Post post;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "commento_padre_id")
+    private Commento commentoPadre;
+
+    @OneToMany(mappedBy = "commentoPadre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Commento> sottoCommenti = new ArrayList<>();
+
+
 
     @ManyToOne
     @JoinColumn(name = "autore_commento")
@@ -47,14 +53,18 @@ public class Commento extends Elemento {
     }
 
     @Override
-    public void addCommento(Commento commento) {
-        this.listaCommenti.add(commento);
+    public void addCommento(Commento sottoCommento) {
+        sottoCommenti.add(sottoCommento);
+        sottoCommento.setCommentoPadre(this);
+        // Imposta il commento corrente come padre del sotto-commento
     }
 
     @Override
-    public void deleteCommento(Commento commento) {
-        this.listaCommenti.remove(commento);
+    public void deleteCommento(Commento sottoCommento) {
+        sottoCommenti.remove(sottoCommento);
     }
+
+
 
     @Override
     public String getTipoElemento() {

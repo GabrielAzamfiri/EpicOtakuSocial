@@ -36,9 +36,16 @@ public class CommentiController {
     @PostMapping("/crea")
     @PreAuthorize("hasAnyAuthority('ADMIN','BASIC_USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Commento save(@AuthenticationPrincipal Utente utenteCorrenteAutenticato, @RequestBody @Validated CommentoDTO commentoDTO){
+    public Commento save(@AuthenticationPrincipal Utente utenteCorrenteAutenticato, @RequestParam(required = false) UUID idCommentoPadre, @RequestBody @Validated CommentoDTO commentoDTO){
 
         return this.commentiService.save(utenteCorrenteAutenticato, commentoDTO);
+    }
+    @PostMapping("/{idCommentoPadre}/crea")
+    @PreAuthorize("hasAnyAuthority('ADMIN','BASIC_USER')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Commento saveSottoCommento(@AuthenticationPrincipal Utente utenteCorrenteAutenticato, @PathVariable UUID idCommentoPadre, @RequestBody @Validated CommentoDTO commentoDTO){
+
+        return this.commentiService.saveSottoCommento(utenteCorrenteAutenticato, commentoDTO, idCommentoPadre);
     }
 
     @DeleteMapping("/{commentoId}")
