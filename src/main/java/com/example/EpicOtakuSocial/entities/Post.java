@@ -16,16 +16,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Post {
+public class Post extends Elemento {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-    private String text;
-    private LocalDateTime ora;
+
     private String file;
-    private Integer numeroLike;
-    private Integer numeroDislike;
 
     @ManyToOne
     @JoinColumn(name = "autore")
@@ -35,18 +32,25 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Commento> listaCommenti = new ArrayList<>();
 
-    public Post(String text, String file) {
-        this.text = text;
-        this.ora = LocalDateTime.now();
+
+    public Post(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike, String file, Utente autore) {
+        super(text, ora, numeroLike, numeroDislike);
         this.file = file;
-        this.numeroLike = 0;
-        this.numeroDislike = 0;
+        this.autore = autore;
     }
 
-    public void addCommento(Commento commento){
+    @Override
+    public void addCommento(Commento commento) {
         this.listaCommenti.add(commento);
     }
-    public void deleteCommento(Commento commento){
+
+    @Override
+    public void deleteCommento(Commento commento) {
         this.listaCommenti.remove(commento);
+    }
+
+    @Override
+    public String getTipoElemento() {
+        return "Post";
     }
 }

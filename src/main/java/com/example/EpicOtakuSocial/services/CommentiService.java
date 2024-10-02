@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -45,27 +44,28 @@ public class CommentiService {
 
     public Commento save(Utente autoreCommento, CommentoDTO commentoDTO) {
 
-        UUID uuidPost;
+        UUID uuidElemento;
         try {
-            uuidPost =  UUID.fromString(commentoDTO.post());
+            uuidElemento =  UUID.fromString(commentoDTO.elementoCommentato());
         }catch (Exception e){
             throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
         }
-        Post post = postsRepository.findById(uuidPost)
-                .orElseThrow(() -> new NotFoundException(commentoDTO.post()));
 
-        Commento commento = new Commento(commentoDTO.commento(),post);
+        Post elemento = postsRepository.findById(uuidElemento)
+                .orElseThrow(() -> new NotFoundException(uuidElemento));
+
+        Commento commento = new Commento(commentoDTO.commento(),LocalDateTime.now(),0,0,uuidElemento,elemento);
         commento.setAutoreCommento(autoreCommento);
         commentiRepository.save(commento);
-        post.addCommento(commento);
-        postsRepository.save(post);
+        elemento.addCommento(commento);
+        postsRepository.save(elemento);
         return commento;
     }
 
-    public Commento update( UUID commentoId ,CommentoDTO commentoDTO) {
+    public Commento update(UUID commentoId , CommentoDTO commentoDTO) {
 
         Commento commento = this.findById(commentoId);
-        commento.setCommento(commentoDTO.commento());
+        commento.setText(commentoDTO.commento());
         commento.setOra(LocalDateTime.now());
 
         return commentiRepository.save(commento);

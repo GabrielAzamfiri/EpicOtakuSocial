@@ -137,7 +137,7 @@ public class UtentiController {
         Commento myCommento = myCommentiList.stream().filter(prenotazione -> prenotazione.getId()
                 .equals(commentoId)).findFirst().orElseThrow(() -> new NotFoundException("Il Commento con id" + commentoId + " non è stato trovato nella tua lista di commenti!"));
 
-        return this.commentiService.update(myCommento.getId(),commentoDTO);
+        return this.commentiService.update(myCommento.getId(), commentoDTO);
     }
     @DeleteMapping("/me/commenti/{commentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -43,11 +43,7 @@ public class PostsService {
     public Post save(String message, MultipartFile file, Utente author) throws IOException {
 
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-
-        Post post = new Post(message,url);
-
-
-        post.setAutore(author);
+        Post post = new Post(message,LocalDateTime.now(),0,0,url,author);
 
         return postsRepository.save(post);
     }

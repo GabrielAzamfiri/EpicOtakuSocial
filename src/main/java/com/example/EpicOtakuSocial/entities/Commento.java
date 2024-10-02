@@ -19,15 +19,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Commento {
+public class Commento extends Elemento {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
-    private String commento;
-    private LocalDateTime ora;
-    private Integer numeroLike;
-    private Integer numeroDislike;
+
     private UUID postId;
 
     @JsonIgnore
@@ -39,17 +36,28 @@ public class Commento {
     @JoinColumn(name = "post")
     private Post post;
 
-
     @ManyToOne
     @JoinColumn(name = "autore_commento")
     private Utente autoreCommento;
 
-    public Commento(String commento, Post post) {
-        this.commento = commento;
-        this.ora = LocalDateTime.now();
-        this.numeroLike = 0;
-        this.numeroDislike = 0;
-        this.post = post;
+    public Commento(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike, UUID postId, Post post) {
+        super(text, ora, numeroLike, numeroDislike);
         this.postId = post.getId();
+        this.post = post;
+    }
+
+    @Override
+    public void addCommento(Commento commento) {
+        this.listaCommenti.add(commento);
+    }
+
+    @Override
+    public void deleteCommento(Commento commento) {
+        this.listaCommenti.remove(commento);
+    }
+
+    @Override
+    public String getTipoElemento() {
+        return "Commento";
     }
 }

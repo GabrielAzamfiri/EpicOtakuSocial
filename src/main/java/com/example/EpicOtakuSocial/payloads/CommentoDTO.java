@@ -7,7 +7,7 @@ public record CommentoDTO(
         @NotEmpty(message = "Campo obbligatorio. Inserire commento.")
         @Size( max = 200, message = "Il commento può avere max 200 caratteri")
         String commento,
-        @NotEmpty(message = "Campo obbligatorio. Inserire post.")
-        String post
+        @NotEmpty(message = "Campo obbligatorio. Inserire l'elemento da commentare.")
+        String elementoCommentato
 ) {
 }

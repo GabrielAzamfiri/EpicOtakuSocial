@@ -38,7 +38,7 @@ public class CommentiController {
     @ResponseStatus(HttpStatus.CREATED)
     public Commento save(@AuthenticationPrincipal Utente utenteCorrenteAutenticato, @RequestBody @Validated CommentoDTO commentoDTO){
 
-        return this.commentiService.save(utenteCorrenteAutenticato,commentoDTO);
+        return this.commentiService.save(utenteCorrenteAutenticato, commentoDTO);
     }
 
     @DeleteMapping("/{commentoId}")
