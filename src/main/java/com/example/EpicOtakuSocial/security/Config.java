@@ -37,7 +37,6 @@ public class Config {
         httpSecurity.authorizeHttpRequests(http -> http.requestMatchers("/**").permitAll());
         httpSecurity.cors(Customizer.withDefaults()); // OBBLIGATORIA QUESTA IMPOSTAZIONE SE VOGLIAMO CHE PER I CORS VENGA UTILIZZATO IL BEAN SOTTOSTANTE
 
-        httpSecurity.cors(Customizer.withDefaults());
         return httpSecurity.build();
     }
 
