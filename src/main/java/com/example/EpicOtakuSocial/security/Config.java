@@ -48,11 +48,11 @@ public class Config {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(this.frontendPort, this.backendPort));
+        configuration.setAllowedOrigins(List.of(this.frontendPort));
 
         configuration.setAllowedMethods(List.of("*"));
+        // Permetti tutti gli header
         configuration.setAllowedHeaders(List.of("*"));
-
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
