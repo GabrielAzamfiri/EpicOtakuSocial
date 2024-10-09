@@ -40,14 +40,6 @@ public class AnimeController {
             urlToFetch += "?orderBy=popularity&page=" + param.getOrDefault("nrPage", "1");
         }
 
-//
-//        ResponseEntity<Anime> resp =
-
-        //Il controller restituisce una String, quindi Spring la serializza come testo,
-        // e l'header Content-Type potrebbe essere interpretato come text/plain anziché application/json.
-        // Questo potrebbe causare problemi al frontend nella parsificazione della risposta JSON.
-        //Per risolvere questo problema, puoi forzare il Content-Type della risposta a application/json,
-        // in modo che il frontend possa riconoscerlo come JSON. Modifica il tuo metodo come segue:
 
         // Forza l'header 'Content-Type' a 'application/json'
 //        HttpHeaders headers = new HttpHeaders();
