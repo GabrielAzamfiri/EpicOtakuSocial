@@ -20,21 +20,21 @@ public class AnimeController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','BASIC_USER')")
+
     public ResponseEntity<String> getAnimeById(@PathVariable String id) {
         return restTemplate.getForEntity(this.url + "/" + id, String.class);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN','BASIC_USER')")
+
     public ResponseEntity<Object> getAnime(@RequestParam(required = false) Map<String, String> param) {
 
         String urlToFetch = this.url;
 
         if (param.containsKey("q")) {
-            urlToFetch += "?q=" + param.get("q");
+            urlToFetch += "?q=" + param.get("q") + "&page=" + param.getOrDefault("nrPage", "1");
         } else if (param.containsKey("start_date")) {
-            urlToFetch += "?start_date=" + param.get("start_date");
+            urlToFetch += "?start_date=" + param.get("start_date") + "&end_date=" + param.get("end_date");
         } else {
             urlToFetch += "?orderBy=popularity&page=" + param.getOrDefault("nrPage", "1");
         }
