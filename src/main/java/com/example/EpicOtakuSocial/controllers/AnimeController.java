@@ -1,5 +1,6 @@
 package com.example.EpicOtakuSocial.controllers;
 
+import com.example.EpicOtakuSocial.entities.anime.Anime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,13 +22,13 @@ public class AnimeController {
 
     @GetMapping("/{id}")
 
-    public ResponseEntity<String> getAnimeById(@PathVariable String id) {
-        return restTemplate.getForEntity(this.url + "/" + id, String.class);
+    public Anime getAnimeById(@PathVariable String id) {
+        return restTemplate.getForObject(this.url + "/" + id, Anime.class);
     }
 
     @GetMapping
 
-    public ResponseEntity<Object> getAnime(@RequestParam(required = false) Map<String, String> param) {
+    public Anime getAnime(@RequestParam(required = false) Map<String, String> param) {
 
         String urlToFetch = this.url;
 
@@ -39,8 +40,8 @@ public class AnimeController {
             urlToFetch += "?orderBy=popularity&page=" + param.getOrDefault("nrPage", "1");
         }
 
-
-        ResponseEntity<Object> resp = restTemplate.getForEntity(urlToFetch, Object.class);
+//
+//        ResponseEntity<Anime> resp =
 
         //Il controller restituisce una String, quindi Spring la serializza come testo,
         // e l'header Content-Type potrebbe essere interpretato come text/plain anziché application/json.
@@ -49,9 +50,9 @@ public class AnimeController {
         // in modo che il frontend possa riconoscerlo come JSON. Modifica il tuo metodo come segue:
 
         // Forza l'header 'Content-Type' a 'application/json'
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new ResponseEntity<>(resp.getBody(), headers, resp.getStatusCode());    }
+        return restTemplate.getForObject(urlToFetch, Anime.class);    }
 }
 
