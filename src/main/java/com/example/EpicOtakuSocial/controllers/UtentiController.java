@@ -103,11 +103,11 @@ public class UtentiController {
         return this.postsService.update(myPost.getId(), message, file);
     }
     @GetMapping("/me/posts")
-    public Page<Post> getMyPosts(@RequestParam(defaultValue = "0") int page,
+    public List<Post> getMyPosts(@RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "20") int size,
                              @RequestParam(defaultValue = "id") String sortBy,
                              @AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
-        return this.postsService.findAll(page, size, sortBy);
+        return this.postsService.findByAutore(utenteCorrenteAutenticato);
     }
     @DeleteMapping("/me/posts/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -121,11 +121,11 @@ public class UtentiController {
         this.postsService.delete(myPost.getId());
     }
     @GetMapping("/me/commenti")
-    public Page<Commento> getMyCommenti(@RequestParam(defaultValue = "0") int page,
+    public List<Commento> getMyCommenti(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "20") int size,
                                      @RequestParam(defaultValue = "id") String sortBy,
                                      @AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
-        return this.commentiService.findAll(page, size, sortBy);
+        return this.commentiService.findByAutoreCommento(utenteCorrenteAutenticato);
     }
 
     @PutMapping("/me/commenti/{commentoId}")
