@@ -1,6 +1,8 @@
 package com.example.EpicOtakuSocial.controllers;
 
 import com.example.EpicOtakuSocial.entities.anime.Anime;
+import com.example.EpicOtakuSocial.entities.anime.Datum;
+import com.example.EpicOtakuSocial.entities.anime.OneAnime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,8 +24,8 @@ public class AnimeController {
 
     @GetMapping("/{id}")
 
-    public Anime getAnimeById(@PathVariable String id) {
-        return restTemplate.getForObject(this.url + "/" + id, Anime.class);
+    public OneAnime getAnimeById(@PathVariable String id) {
+        return restTemplate.getForObject(this.url + "/" + id, OneAnime.class);
     }
 
     @GetMapping
