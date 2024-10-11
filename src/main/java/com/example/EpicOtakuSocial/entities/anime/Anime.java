@@ -8,6 +8,7 @@ import java.util.List;
 public class Anime {
     private Pagination pagination;
     private List<Datum> data;
+
 }
 
 

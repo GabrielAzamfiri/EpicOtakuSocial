@@ -1,5 +1,6 @@
 package com.example.EpicOtakuSocial.entities;
 
+import com.example.EpicOtakuSocial.entities.anime.Datum;
 import com.example.EpicOtakuSocial.enums.RuoloUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,7 +37,10 @@ public class Utente implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RuoloUser ruolo;
     private String avatar;
-    private List<String> listaAmici = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "utente")
+    private List<AnimeFavorite> listaAnimePreferiti = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "autore")

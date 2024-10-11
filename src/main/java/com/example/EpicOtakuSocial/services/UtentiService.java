@@ -56,6 +56,10 @@ public class UtentiService {
 
         return new UtenteRespDTO(savedUtente.getId());
     }
+    public Utente save(Utente body) {
+
+        return utentiRepository.save(body);
+    }
 
 
     // cerco tutti gli utenti

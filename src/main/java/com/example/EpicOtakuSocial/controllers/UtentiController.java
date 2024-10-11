@@ -1,13 +1,16 @@
 package com.example.EpicOtakuSocial.controllers;
 
 
+import com.example.EpicOtakuSocial.entities.AnimeFavorite;
 import com.example.EpicOtakuSocial.entities.Commento;
 import com.example.EpicOtakuSocial.entities.Post;
 import com.example.EpicOtakuSocial.entities.Utente;
+import com.example.EpicOtakuSocial.entities.anime.Datum;
 import com.example.EpicOtakuSocial.exceptions.NotFoundException;
 import com.example.EpicOtakuSocial.payloads.CommentoDTO;
 import com.example.EpicOtakuSocial.payloads.UtenteDTO;
 import com.example.EpicOtakuSocial.payloads.UtenteRespDTO;
+import com.example.EpicOtakuSocial.services.AnimeFavoriteService;
 import com.example.EpicOtakuSocial.services.CommentiService;
 import com.example.EpicOtakuSocial.services.PostsService;
 import com.example.EpicOtakuSocial.services.UtentiService;
@@ -35,6 +38,9 @@ public class UtentiController {
     private PostsService postsService;
     @Autowired
     private CommentiService commentiService;
+
+    @Autowired
+    private AnimeFavoriteService animeFavoriteService;
 
 
 
@@ -128,6 +134,8 @@ public class UtentiController {
         return this.commentiService.findByAutoreCommento(utenteCorrenteAutenticato);
     }
 
+
+
     @PutMapping("/me/commenti/{commentoId}")
     public Commento findByIdAndUpdate(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato,
                                       @RequestBody @Validated CommentoDTO commentoDTO) {
@@ -145,10 +153,21 @@ public class UtentiController {
         List<Commento> myCommentiList = commentiService.findByAutoreCommento(utenteCorrenteAutenticato);
 
         //controllo che l'id passato sia uno della sua lista
-        Commento myCommento = myCommentiList.stream().filter(prenotazione -> prenotazione.getId()
+        Commento myCommento = myCommentiList.stream().filter(commento -> commento.getId()
                 .equals(commentoId)).findFirst().orElseThrow(() -> new NotFoundException("Il Commento con id" + commentoId + " non è stato trovato nella tua lista di commenti!"));
 
         this.commentiService.delete(myCommento.getId());
+    }
+
+    @DeleteMapping("/me/anime/{idAnime}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAnimeFavorite(@AuthenticationPrincipal Utente utenteCorrenteAutenticato, @PathVariable Long idAnime) {
+        AnimeFavorite animeFavorite = animeFavoriteService.findByIdAndUtente(idAnime,utenteCorrenteAutenticato);
+        this.animeFavoriteService.delete(animeFavorite.getId());
+    }
+    @GetMapping("/me/anime")
+    public List<AnimeFavorite> getMyAnime(@AuthenticationPrincipal Utente utenteCorrenteAutenticato) {
+        return this.animeFavoriteService.findByUtente(utenteCorrenteAutenticato);
     }
 
     // CLOUDINARY

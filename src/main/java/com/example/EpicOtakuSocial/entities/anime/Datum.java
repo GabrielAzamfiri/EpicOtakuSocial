@@ -1,5 +1,7 @@
 package com.example.EpicOtakuSocial.entities.anime;
 
+import jakarta.persistence.Entity;
+
 import java.util.List;
 import java.util.Map;
 

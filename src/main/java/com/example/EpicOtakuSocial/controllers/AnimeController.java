@@ -40,11 +40,12 @@ public class AnimeController {
             urlToFetch += "?orderBy=popularity&page=" + param.getOrDefault("nrPage", "1");
         }
 
-
         // Forza l'header 'Content-Type' a 'application/json'
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_JSON);
-
         return restTemplate.getForObject(urlToFetch, Anime.class);    }
+
+
+
 }
 
