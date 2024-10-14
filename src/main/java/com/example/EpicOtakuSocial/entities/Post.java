@@ -25,6 +25,8 @@ public class Post extends Elemento {
     private UUID id;
 
     private String file;
+    private Long animeId;
+
 
     @ManyToOne
     @JoinColumn(name = "autore")
@@ -35,10 +37,12 @@ public class Post extends Elemento {
     private List<Commento> listaCommenti = new ArrayList<>();
 
 
-    public Post(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike, String file, Utente autore) {
+    public Post(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike,
+                String file, Utente autore, Long animeId) {
         super(text, ora, numeroLike, numeroDislike);
         this.file = file;
         this.autore = autore;
+        this.animeId= animeId;
     }
 
     public List<Commento> getCommentiPrincipali() {

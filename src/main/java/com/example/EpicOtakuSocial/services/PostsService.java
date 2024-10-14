@@ -38,15 +38,18 @@ public class PostsService {
         post.setListaCommenti(post.getCommentiPrincipali());
         return post;
     }
+    public List<Post> findByAnimeId(Long animeId) {
+        return this.postsRepository.findByAnimeId(animeId);
+    }
 
     public List<Post> findByAutore(Utente autore) {
         return this.postsRepository.findByAutore(autore);
     }
 
-    public Post save(String message, MultipartFile file, Utente author) throws IOException {
+    public Post save(String message, MultipartFile file, Utente author, Long animeId) throws IOException {
 
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        Post post = new Post(message,LocalDateTime.now(),0,0,url,author);
+        Post post = new Post(message,LocalDateTime.now(),0,0,url,author, animeId);
 
         return postsRepository.save(post);
     }

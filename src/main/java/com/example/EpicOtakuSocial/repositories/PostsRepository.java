@@ -12,4 +12,7 @@ import java.util.UUID;
 @Repository
 public interface PostsRepository extends JpaRepository<Post, UUID> {
     List<Post> findByAutore(Utente autore);
+
+    List<Post> findByAnimeId(Long animeId);
+
 }

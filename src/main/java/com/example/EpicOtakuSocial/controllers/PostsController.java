@@ -1,28 +1,17 @@
 package com.example.EpicOtakuSocial.controllers;
-
-
 import com.example.EpicOtakuSocial.entities.Post;
 import com.example.EpicOtakuSocial.entities.Utente;
-import com.example.EpicOtakuSocial.exceptions.BadRequestException;
-import com.example.EpicOtakuSocial.payloads.PostDTO;
-import com.example.EpicOtakuSocial.payloads.UtenteDTO;
-import com.example.EpicOtakuSocial.payloads.UtenteRespDTO;
 import com.example.EpicOtakuSocial.services.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -41,16 +30,18 @@ public class PostsController {
                                @RequestParam(defaultValue = "id") String sortBy) {
         return this.postsService.findAll(page, size, sortBy);
     }
+    @GetMapping("/{animeId}")
+    public List<Post> getByAnimeId(@PathVariable Long animeId) {
+        return this.postsService.findByAnimeId(animeId);
+    }
 
-    @PostMapping("/crea")
+    @PostMapping("/{animeId}/crea")
     @PreAuthorize("hasAnyAuthority('ADMIN','BASIC_USER')")
     @ResponseStatus(HttpStatus.CREATED)
     public Post save( @RequestParam("message") String message, @RequestParam("avatar") MultipartFile file,
-                      @AuthenticationPrincipal Utente utenteCorrenteAutenticato)throws IOException{
+                      @AuthenticationPrincipal Utente utenteCorrenteAutenticato, @PathVariable String animeId)throws IOException{
 
-
-            return this.postsService.save(message,file, utenteCorrenteAutenticato);
-
+        return this.postsService.save(message,file, utenteCorrenteAutenticato, Long.valueOf(animeId));
     }
 
     @DeleteMapping("/{postId}")
