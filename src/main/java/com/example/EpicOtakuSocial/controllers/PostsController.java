@@ -30,9 +30,9 @@ public class PostsController {
                                @RequestParam(defaultValue = "id") String sortBy) {
         return this.postsService.findAll(page, size, sortBy);
     }
-    @GetMapping("/{animeId}")
-    public List<Post> getByAnimeId(@PathVariable Long animeId) {
-        return this.postsService.findByAnimeId(animeId);
+    @GetMapping("/anime/{animeId}")
+    public List<Post> getByAnimeId(@PathVariable String animeId) {
+        return this.postsService.findByAnimeId(Long.valueOf(animeId));
     }
 
     @PostMapping("/{animeId}/crea")
