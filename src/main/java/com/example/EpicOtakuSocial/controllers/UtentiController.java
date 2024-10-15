@@ -49,6 +49,21 @@ public class UtentiController {
         return this.utentiService.findById(utenteId);
     }
 
+    @GetMapping("/{utenteId}/posts")
+    public List<Post> getPostByIdUser(@PathVariable UUID utenteId) {
+
+        return this.utentiService.findById(utenteId).getPostList();
+    }
+
+    @GetMapping("/{utenteId}/comments")
+    public List<Commento> getCommentsByIdUser(@PathVariable UUID utenteId) {
+        return this.utentiService.findById(utenteId).getCommentiList();
+    }
+    @GetMapping("/{utenteId}/favoriteAnime")
+    public List<AnimeFavorite> getFavoriteAnimeByIdUser(@PathVariable UUID utenteId) {
+        return this.utentiService.findById(utenteId).getListaAnimePreferiti();
+    }
+
     @GetMapping
     public Page<Utente> getAll(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,

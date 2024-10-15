@@ -33,7 +33,7 @@ public class Post extends Elemento {
     private Utente autore;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post" , cascade = CascadeType.REMOVE)
     private List<Commento> listaCommenti = new ArrayList<>();
 
 
