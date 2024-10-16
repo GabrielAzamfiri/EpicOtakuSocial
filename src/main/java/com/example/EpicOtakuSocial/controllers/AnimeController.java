@@ -38,6 +38,8 @@ public class AnimeController {
             urlToFetch += "?q=" + param.get("q") + "&page=" + param.getOrDefault("nrPage", "1");
         } else if (param.containsKey("start_date")) {
             urlToFetch += "?start_date=" + param.get("start_date") + "&end_date=" + param.get("end_date");
+        } else if (param.containsKey("genres")) {
+            urlToFetch += "?orderBy=popularity&genres=" + param.get("genres") + "&page=" + param.getOrDefault("nrPage", "1");
         } else {
             urlToFetch += "?orderBy=popularity&page=" + param.getOrDefault("nrPage", "1");
         }
