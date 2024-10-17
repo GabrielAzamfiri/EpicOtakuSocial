@@ -50,9 +50,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        // Verifica se il metodo è GET
+        boolean isGetMethod = "GET".equalsIgnoreCase(request.getMethod());
 
         return new AntPathMatcher().match("/auth/**", request.getServletPath()) ||
-                new AntPathMatcher().match("/anime/**", request.getServletPath());
+                new AntPathMatcher().match("/anime/**", request.getServletPath()) ||
+                isGetMethod && (new AntPathMatcher().match("/posts/**", request.getServletPath())) ;
     }
 
 }
