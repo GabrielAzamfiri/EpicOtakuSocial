@@ -27,17 +27,20 @@ public class AnimeFavorite {
     private String image;
     private List<String> genres;
     private String aired;
+    private String synopsis;
+
 
     @ManyToOne
     @JoinColumn(name = "utente")
     private Utente utente ;
 
-    public AnimeFavorite(long idAnime, String title, String image, List<String> genres, String aired, Utente utente) {
+    public AnimeFavorite(long idAnime, String title, String image, List<String> genres, String aired, String synopsis, Utente utente) {
         this.idAnime = idAnime;
         this.title = title;
         this.image = image;
         this.genres = genres;
         this.aired = aired;
+        this.synopsis = synopsis;
         this.utente = utente;
     }
 }

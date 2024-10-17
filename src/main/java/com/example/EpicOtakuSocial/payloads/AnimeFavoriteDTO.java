@@ -15,6 +15,8 @@ public record AnimeFavoriteDTO(
         @NotEmpty(message = "Campo obbligatorio. Inserire genres.")
         List<String> genres,
         @NotEmpty(message = "Campo obbligatorio. Inserire aired.")
-        String aired
+        String aired,
+        @NotEmpty(message = "Campo obbligatorio. Inserire synopsis.")
+        String synopsis
 ) {
 }

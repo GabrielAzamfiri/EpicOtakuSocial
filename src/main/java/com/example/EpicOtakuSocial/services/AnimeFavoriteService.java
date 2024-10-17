@@ -35,7 +35,7 @@ public class AnimeFavoriteService {
 
     public AnimeFavorite save(AnimeFavoriteDTO body, Utente utente) {
 
-        AnimeFavorite animeFavorite = new AnimeFavorite(body.id() ,body.title() , body.image(),body.genres() ,body.aired(), utente);
+        AnimeFavorite animeFavorite = new AnimeFavorite(body.id() ,body.title() , body.image(),body.genres() ,body.aired(), body.synopsis(), utente);
         return animeFavoriteRepository.save(animeFavorite);
     }
     public List<AnimeFavorite> findByUtente(Utente body) {
