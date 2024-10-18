@@ -39,14 +39,14 @@ public class Utente implements UserDetails {
     private String avatar;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente" , cascade = CascadeType.REMOVE)
     private List<AnimeFavorite> listaAnimePreferiti = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "autore")
+    @OneToMany(mappedBy = "autore", cascade = CascadeType.REMOVE)
     private List<Post> postList = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "autoreCommento")
+    @OneToMany(mappedBy = "autoreCommento", cascade = CascadeType.REMOVE)
     private List<Commento> commentiList = new ArrayList<>();
 
     public Utente(String username, String nome, String cognome, String email, String password, RuoloUser ruolo, String avatar) {
