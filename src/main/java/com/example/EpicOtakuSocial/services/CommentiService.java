@@ -105,6 +105,49 @@ public class CommentiService {
 
         return commentiRepository.save(commento);
     }
+    public Commento addLike(UUID commentoId, UUID utente)  {
+        Commento commento = this.findById(commentoId);
+        boolean hasLiked =   commento.numeroLike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasLiked) {
+            throw new BadRequestException("Hai già messo like al commento!");
+        }else {
+            commento.addLike(utente);
+        }
+        return commentiRepository.save(commento);
+    }
+    public Commento removeLike(UUID commentoId, UUID utente)  {
+
+        Commento commento = this.findById(commentoId);
+        boolean hasLiked =   commento.numeroLike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasLiked) {
+            commento.removeLike(utente);
+        }else {
+            throw new BadRequestException("Nessun like da rimuovere!");
+        }
+        return commentiRepository.save(commento);
+    }
+    public Commento addDislike(UUID commentoId, UUID utente) {
+
+        Commento commento = this.findById(commentoId);
+        boolean hasDisliked =   commento.numeroDislike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasDisliked) {
+            throw new BadRequestException("Hai già messo dislike al commento!");
+        }else {
+            commento.addDislike(utente);
+        }
+        return commentiRepository.save(commento);
+    }
+    public Commento removeDislike(UUID commentoId, UUID utente)  {
+
+        Commento commento = this.findById(commentoId);
+        boolean hasDisliked =   commento.numeroDislike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasDisliked) {
+            commento.removeDislike(utente);
+        }else {
+            throw new BadRequestException("Nessun dislike da rimuovere!");
+        }
+        return commentiRepository.save(commento);
+    }
 
     public void delete(UUID commentoId) {
         Commento commento = this.findById(commentoId);

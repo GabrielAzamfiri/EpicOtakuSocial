@@ -1,6 +1,7 @@
 package com.example.EpicOtakuSocial.controllers;
 
 import com.example.EpicOtakuSocial.entities.Commento;
+import com.example.EpicOtakuSocial.entities.Post;
 import com.example.EpicOtakuSocial.entities.Utente;
 import com.example.EpicOtakuSocial.payloads.CommentoDTO;
 import com.example.EpicOtakuSocial.services.CommentiService;
@@ -25,6 +26,22 @@ public class CommentiController {
     @GetMapping("/{commentoId}")
     public Commento getById(@PathVariable UUID commentoId) {
         return this.commentiService.findById(commentoId);
+    }
+    @PutMapping("/{commentoId}/likes")
+    public Commento likeTheComment(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.commentiService.addLike(commentoId, utenteCorrenteAutenticato.getId());
+    }
+    @PutMapping("/{commentoId}/likes/remove")
+    public Commento removeLikeComment(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.commentiService.removeLike(commentoId, utenteCorrenteAutenticato.getId());
+    }
+    @PutMapping("/{commentoId}/dislikes")
+    public Commento dislikeTheComment(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.commentiService.addDislike(commentoId, utenteCorrenteAutenticato.getId());
+    }
+    @PutMapping("/{commentoId}/dislikes/remove")
+    public Commento removeDislikeComment(@PathVariable UUID commentoId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.commentiService.removeDislike(commentoId, utenteCorrenteAutenticato.getId());
     }
 
     @GetMapping
