@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,17 +24,22 @@ public abstract class Elemento {
     private UUID id;
     private String text;
     private LocalDateTime ora;
-    private Integer numeroLike;
-    private Integer numeroDislike;
+    public List<UUID> numeroLike= new ArrayList<>();
+    public List<UUID> numeroDislike = new ArrayList<>();
 
-    public Elemento(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike) {
+    public Elemento(String text, LocalDateTime ora) {
         this.text = text;
         this.ora = ora;
-        this.numeroLike = numeroLike;
-        this.numeroDislike = numeroDislike;
+
     }
 
     public abstract  void  addCommento(Commento commento);
     public abstract void deleteCommento(Commento commento);
     public abstract String getTipoElemento();
+    public abstract  void  addLike(UUID utente);
+    public abstract  void  removeLike(UUID utente);
+
+    public abstract  void  addDislike(UUID utente);
+    public abstract  void  removeDislike(UUID utente);
+
 }

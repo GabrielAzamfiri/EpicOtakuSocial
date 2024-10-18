@@ -46,8 +46,8 @@ public class Commento extends Elemento {
     @JoinColumn(name = "autore_commento")
     private Utente autoreCommento;
 
-    public Commento(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike, UUID postId, Post post) {
-        super(text, ora, numeroLike, numeroDislike);
+    public Commento(String text, LocalDateTime ora, UUID postId, Post post) {
+        super(text, ora);
         this.postId = post.getId();
         this.post = post;
     }
@@ -69,5 +69,31 @@ public class Commento extends Elemento {
     @Override
     public String getTipoElemento() {
         return "Commento";
+    }
+
+    @Override
+    public void addLike(UUID utente) {
+        this.numeroDislike.remove(utente);
+        this.numeroLike.add(utente);
+
+    }
+
+    @Override
+    public void removeLike(UUID utente) {
+        this.numeroLike.remove(utente);
+
+    }
+
+    @Override
+    public void addDislike(UUID utente) {
+        this.numeroLike.remove(utente);
+        this.numeroDislike.add(utente);
+
+    }
+
+    @Override
+    public void removeDislike(UUID utente) {
+        this.numeroDislike.remove(utente);
+
     }
 }

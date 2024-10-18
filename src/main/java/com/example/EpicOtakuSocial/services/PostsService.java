@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.EpicOtakuSocial.entities.Post;
 import com.example.EpicOtakuSocial.entities.Utente;
+import com.example.EpicOtakuSocial.exceptions.BadRequestException;
 import com.example.EpicOtakuSocial.exceptions.NotFoundException;
 import com.example.EpicOtakuSocial.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class PostsService {
     public Post save(String message, MultipartFile file, Utente author, Long animeId) throws IOException {
 
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        Post post = new Post(message,LocalDateTime.now(),0,0,url,author, animeId);
+        Post post = new Post(message,LocalDateTime.now(),url,author, animeId);
 
         return postsRepository.save(post);
     }
@@ -64,6 +65,49 @@ public class PostsService {
         post.setFile(url);
         post.setOra(LocalDateTime.now());
 
+        return postsRepository.save(post);
+    }
+    public Post addLike(UUID postId, UUID utente)  {
+        Post post = this.findById(postId);
+        boolean hasLiked =   post.numeroLike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasLiked) {
+            throw new BadRequestException("Hai già messo like al post!");
+        }else {
+            post.addLike(utente);
+        }
+        return postsRepository.save(post);
+    }
+    public Post removeLike(UUID postId, UUID utente)  {
+
+        Post post = this.findById(postId);
+        boolean hasLiked =   post.numeroLike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasLiked) {
+            post.removeLike(utente);
+        }else {
+            throw new BadRequestException("Nessun like da rimuovere!");
+        }
+        return postsRepository.save(post);
+    }
+    public Post addDislike(UUID postId, UUID utente) {
+
+        Post post = this.findById(postId);
+      boolean hasDisliked =   post.numeroDislike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasDisliked) {
+            throw new BadRequestException("Hai già messo dislike al post!");
+        }else {
+            post.addDislike(utente);
+        }
+        return postsRepository.save(post);
+    }
+    public Post removeDislike(UUID postId, UUID utente)  {
+
+        Post post = this.findById(postId);
+        boolean hasDisliked =   post.numeroDislike.stream().anyMatch(uuid -> uuid.equals(utente));
+        if (hasDisliked) {
+            post.removeDislike(utente);
+        }else {
+            throw new BadRequestException("Nessun dislike da rimuovere!");
+        }
         return postsRepository.save(post);
     }
 

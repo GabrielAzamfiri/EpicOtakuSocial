@@ -58,7 +58,7 @@ public class CommentiService {
                 .orElseThrow(() -> new NotFoundException(uuidElemento));
 
         Commento nuovoCommento = new Commento(commentoDTO.commento(),LocalDateTime.now(),
-                0,0,uuidElemento,elemento);
+                uuidElemento,elemento);
 
         nuovoCommento.setAutoreCommento(autoreCommento);
 
@@ -82,7 +82,7 @@ public class CommentiService {
         Post elemento = postsRepository.findById(uuidElemento)
                 .orElseThrow(() -> new NotFoundException(uuidElemento));
 
-        Commento nuovoSottoCommento = new Commento(commentoDTO.commento(),LocalDateTime.now(),0,0,uuidElemento,elemento);
+        Commento nuovoSottoCommento = new Commento(commentoDTO.commento(),LocalDateTime.now(),uuidElemento,elemento);
         nuovoSottoCommento.setAutoreCommento(autoreCommento);
 
         Optional<Commento> commentoPadreOpt = commentiRepository.findById(idCommentoPadre);

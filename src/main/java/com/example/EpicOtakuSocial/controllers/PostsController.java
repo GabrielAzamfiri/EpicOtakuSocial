@@ -23,6 +23,22 @@ public class PostsController {
     public Post getById(@PathVariable UUID postId) {
         return this.postsService.findById(postId);
     }
+    @PutMapping("/{postId}/likes")
+    public Post likeThePost(@PathVariable UUID postId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.postsService.addLike(postId, utenteCorrenteAutenticato.getId());
+    }
+    @PutMapping("/{postId}/likes/remove")
+    public Post removeLikePost(@PathVariable UUID postId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.postsService.removeLike(postId, utenteCorrenteAutenticato.getId());
+    }
+    @PutMapping("/{postId}/dislikes")
+    public Post dislikeThePost(@PathVariable UUID postId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.postsService.addDislike(postId, utenteCorrenteAutenticato.getId());
+    }
+    @PutMapping("/{postId}/dislikes/remove")
+    public Post removeDislikePost(@PathVariable UUID postId, @AuthenticationPrincipal Utente utenteCorrenteAutenticato ) {
+        return this.postsService.removeDislike(postId, utenteCorrenteAutenticato.getId());
+    }
 
     @GetMapping
     public Page<Post> getAll(@RequestParam(defaultValue = "0") int page,

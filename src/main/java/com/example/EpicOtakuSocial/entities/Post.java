@@ -37,9 +37,9 @@ public class Post extends Elemento {
     private List<Commento> listaCommenti = new ArrayList<>();
 
 
-    public Post(String text, LocalDateTime ora, Integer numeroLike, Integer numeroDislike,
+    public Post(String text, LocalDateTime ora,
                 String file, Utente autore, Long animeId) {
-        super(text, ora, numeroLike, numeroDislike);
+        super(text, ora);
         this.file = file;
         this.autore = autore;
         this.animeId= animeId;
@@ -66,5 +66,28 @@ public class Post extends Elemento {
     @Override
     public String getTipoElemento() {
         return "Post";
+    }
+
+    @Override
+    public void addLike(UUID utente) {
+       this.numeroLike.add(utente);
+        this.numeroDislike.remove(utente);
+    }
+
+    @Override
+    public void removeLike(UUID utente) {
+        this.numeroLike.remove(utente);
+    }
+
+    @Override
+    public void addDislike(UUID utente) {
+        this.numeroLike.remove(utente);
+        this.numeroDislike.add(utente);
+
+    }
+
+    @Override
+    public void removeDislike(UUID utente) {
+        this.numeroDislike.remove(utente);
     }
 }
