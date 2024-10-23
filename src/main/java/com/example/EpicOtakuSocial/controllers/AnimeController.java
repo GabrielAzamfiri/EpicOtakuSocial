@@ -39,9 +39,9 @@ public class AnimeController {
         } else if (param.containsKey("start_date")) {
             urlToFetch += "?start_date=" + param.get("start_date") + "&end_date=" + param.get("end_date");
         } else if (param.containsKey("genres")) {
-            urlToFetch += "?orderBy=popularity&genres=" + param.get("genres") + "&page=" + param.getOrDefault("nrPage", "1");
+            urlToFetch += "?orderBy=favorites&sort=desc&genres=" + param.get("genres") + "&page=" + param.getOrDefault("nrPage", "1");
         } else {
-            urlToFetch += "?orderBy=popularity&page=" + param.getOrDefault("nrPage", "1");
+            urlToFetch += "?orderBy=favorites&sort=desc&page=" + param.getOrDefault("nrPage", "1");
         }
 
         // Forza l'header 'Content-Type' a 'application/json'
